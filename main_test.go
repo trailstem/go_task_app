@@ -21,7 +21,7 @@ func TestRun(t *testing.T) {
 
 	rsp, err := http.Get("http://localhost:18080/" + in)
 	if err != nil {
-		t.Errorf("failed to get : %v", err)
+		t.Errorf("failed to get : %+v", err)
 	}
 	defer rsp.Body.Close()
 
@@ -41,5 +41,4 @@ func TestRun(t *testing.T) {
 	if err := eg.Wait(); err != nil {
 		t.Fatal(err)
 	}
-
 }
