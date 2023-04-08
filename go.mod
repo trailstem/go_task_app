@@ -12,9 +12,13 @@ require (
 )
 
 require (
+	github.com/DATA-DOG/go-sqlmock v1.5.0
 	github.com/caarlos0/env v3.5.0+incompatible
 	github.com/caarlos0/env/v6 v6.10.1 // indirect
 	github.com/go-chi/chi v1.5.4
 	github.com/go-playground/validator v9.31.0+incompatible
+	github.com/go-sql-driver/mysql v1.7.0
 	github.com/google/go-cmp v0.5.9
+	github.com/jmoiron/sqlx v1.3.5
+	golang.org/x/crypto v0.8.0
 )
