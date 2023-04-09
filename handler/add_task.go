@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
-	"time"
 
 	"github.com/go-playground/validator"
+	"github.com/jmoiron/sqlx"
 	"github.com/trailstem/go_task_app/entity"
 	"github.com/trailstem/go_task_app/store"
 	"github.com/trailstem/go_task_app/testutil"
@@ -16,6 +16,8 @@ import (
 
 type AddTask struct {
 	Store     *store.TaskStore
+	DB        *sqlx.DB
+	Repo      *store.Repository
 	Validator *validator.Validate
 }
 
@@ -92,11 +94,11 @@ func (at *AddTask) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	t := &entity.Task{
-		Title:   b.Title,
-		Status:  entity.TaskStatusTodo,
-		Created: time.Now(),
+		Title:  b.Title,
+		Status: entity.TaskStatusTodo,
 	}
-	id, err := store.Tasks.Add(t)
+
+	err = at.Repo.AddTask(ctx, at.DB, t)
 
 	if err != nil {
 		testutil.RespondJSON(ctx, w, &testutil.ErrResponse{
@@ -106,6 +108,6 @@ func (at *AddTask) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	rsp := struct {
 		ID entity.TaskID `json:"id"`
-	}{ID: id}
+	}{ID: t.ID}
 	testutil.RespondJSON(ctx, w, rsp, http.StatusOK)
 }
